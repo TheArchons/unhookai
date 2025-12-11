@@ -3,7 +3,7 @@
   "name": "Unhook AI",
   "version": "1.0",
 
-  "description": "Scans and blocks web pages that are not productive using AI.",
+  "description": "Scans and blocks web pages that are not productive using AI. Your own openrouter API key is required for this addon to function, please add it in the extension preferences (about:addons -> Unhook AI -> Preferences).",
 
   "icons": {
     "48": "icons/Gabriel.jpg"
@@ -16,7 +16,6 @@
     }
   ],
   "permissions": [
-    "webRequest",
     "https://openrouter.ai/api/v1/chat/completions",
     "storage"
   ],

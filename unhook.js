@@ -38,7 +38,7 @@ async function ready() {
 
     response = await response.json()
 
-    //console.log(response)
+    // console.log(response)
 
     if (response?.choices?.[0]?.message?.content !== "TRUE") {
         setTimeout(ready, recheckTime); // check again in 5 minutes in case of a page navigation or something
@@ -52,6 +52,7 @@ async function ready() {
             <textarea minlength="50" style="color: black" required></textarea>
             <input type="submit" value="Submit" />
         </form>
+        <p>Reasoning: ${response.choices[0].message.reasoning}</p>
     `;
 
     document.body.style.backgroundColor = 'black';
