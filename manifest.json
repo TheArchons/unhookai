@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "Unhook AI",
+  "version": "1.0",
+
+  "description": "Scans and blocks web pages that are not productive using AI.",
+
+  "icons": {
+    "48": "icons/Gabriel.jpg"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["unhook.js"]
+    }
+  ],
+  "permissions": [
+    "webRequest",
+    "https://openrouter.ai/api/v1/chat/completions",
+    "storage"
+  ],
+  "options_ui": {
+    "page": "options.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "@unhook-ai"
+    }
+  }
+}
