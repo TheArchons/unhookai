@@ -2,11 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <style>
+      table, td {
+        border: 1px solid lightgrey;
+        border-collapse: collapse;
+      }
+    </style>
+
   </head>
 
   <body>
     <form>
       <label>Openrouter Key <input type="text" id="key" name="Key" /></label>
+
+      <p>Whitelist</p>
+      <textarea id="whitelist"></textarea>
+
+      <p>Blacklist</p>
+      <textarea id="blacklist"></textarea>
+
       <button type="submit">Save</button>
     </form>
 

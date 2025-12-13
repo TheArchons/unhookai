@@ -45,6 +45,10 @@ async function ready() {
         return; // Either error or the page is productive, so we ignore
     }
 
+    block(response.choices[0].message.reasoning);
+}
+
+function block(reasoning) {
     document.body.innerHTML = `
         <h1 style="color: white">Are you procrastinating?</h1>
         <p style="color: white">The AI gods say you are. If you truly aren't, type an at least 50 character explanation for why need to visit this page.</p>
@@ -52,7 +56,7 @@ async function ready() {
             <textarea minlength="50" style="color: black" required></textarea>
             <input type="submit" value="Submit" />
         </form>
-        <p style="color: white">Reasoning: ${response.choices[0].message.reasoning}</p>
+        <p style="color: white">Reasoning: ${reasoning}</p>
     `;
 
     document.body.style.backgroundColor = 'black';
@@ -70,16 +74,39 @@ function bypass(e) {
     window.location.reload();
 }
 
-function main() {
+function inList(listText, match) {
+    const list = listText.split();
+    console.log(list)
+
+    // If the listText is empty we ignore the regex since an empty string matches everything
+    return listText && list.some(item => match.match(item))
+}
+
+async function main() {
+    let {whitelist: whiteListText, blacklist: blacklistText} = await browser.storage.sync.get(['whitelist', 'blacklist']);
+    // console.log("whitelist")
+    // console.log(whiteListText, blacklistText)
+
+    if (inList(whiteListText, window.location.href)) {
+        console.log("whitelisted");
+        return;
+    }
+
+    if (inList(blacklistText, window.location.href)) {
+        block("Blacklisted Website")
+        return;
+    }
+    
     if (document.cookie.includes('BypassUnhook=True;')) {
         document.cookie = 'BypassUnhook=False';
         setTimeout(ready, recheckTime)
+        return;
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => setTimeout(ready, delayTime));
     } else {
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", () => setTimeout(ready, delayTime));
-        } else {
-            setTimeout(ready, delayTime);
-        }
+        setTimeout(ready, delayTime);
     }
 }
 
