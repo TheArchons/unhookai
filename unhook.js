@@ -1,5 +1,6 @@
 const delayTime = 5000
-const recheckTime = 600000
+const bypassTime = 600000
+const recheckTime = 60000
 
 async function ready() {
     //console.log(document.cookie)
@@ -42,7 +43,8 @@ async function ready() {
     console.log(response)
 
     if (response?.choices?.[0]?.message?.content !== "TRUE") {
-        setTimeout(ready, recheckTime); // check again in 5 minutes in case of a page navigation or something
+        console.log(`rechecking in ${recheckTime}`)
+        setTimeout(ready, recheckTime); // check again later in case of a page navigation or something
         return; // Either error or the page is productive, so we ignore
     }
 
@@ -100,7 +102,7 @@ async function main() {
     
     if (document.cookie.includes('BypassUnhook=True;')) {
         document.cookie = 'BypassUnhook=False';
-        setTimeout(ready, recheckTime)
+        setTimeout(ready, bypassTime)
         return;
     }
 
