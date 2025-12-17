@@ -25,6 +25,7 @@ async function ready() {
         },
         body: JSON.stringify({
             model: 'openai/gpt-oss-20b:free',
+            temperature: 0,
             messages: [
             {
                 role: 'user',
