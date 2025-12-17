@@ -59,8 +59,10 @@ function block(reasoning) {
             <textarea minlength="50" style="color: black" required></textarea>
             <input type="submit" value="Submit" />
         </form>
-        <p style="color: white">Reasoning: ${reasoning}</p>
+        <p style="color: white" id="reasoning"></p>
     `;
+
+    document.getElementById("reasoning").textContent = `Reasoning: ${reasoning}`;
 
     document.body.style.backgroundColor = 'black';
 

@@ -24,7 +24,10 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "@unhook-ai"
+      "id": "@unhook-ai",
+      "data_collection_permissions": {
+        "required": ["websiteContent", "searchTerms"]
+      }
     }
   }
 }
