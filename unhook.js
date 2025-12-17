@@ -18,7 +18,6 @@ async function ready() {
 
     let response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: 'POST',
-        stream: false,
         headers: {
             Authorization: `Bearer ${key}`,
             'Content-Type': 'application/json'
@@ -34,7 +33,9 @@ async function ready() {
         }),
     })
 
-    // console.log(response)
+    // console.log(`You are an AI that automatically determines if the site the user is on is one that is productive or they are procrastinating. If the user is on the main page of sites that can either be productive or not, err on the safe side. For example, the youtube subscriptions page should be allowed. Return only the word "TRUE" if the user is on procrastinating content, and "FALSE" otherwise. ONLY return TRUE/FALSE, do not say anything else.\nURL: ${window.location.href}\n${content}`);
+
+    console.log(response)
 
     response = await response.json()
 
@@ -75,7 +76,7 @@ function bypass(e) {
 }
 
 function inList(listText, match) {
-    const list = listText.split();
+    const list = listText.split("\n");
     console.log(list)
 
     // If the listText is empty we ignore the regex since an empty string matches everything
