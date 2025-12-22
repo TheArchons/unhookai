@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Unhook AI",
-  "version": "1.0",
+  "version": "1.1",
 
   "description": "Scans and blocks web pages that are not productive using AI. Your own openrouter API key is required for this addon to function, please add it in the extension preferences (about:addons -> Unhook AI -> Preferences).",
 
