@@ -1,6 +1,4 @@
 function saveOptions(e) {
-  e.preventDefault();
-
   browser.storage.sync.set({
     key: document.querySelector("#key").value,
     whitelist: document.querySelector("#whitelist").value,
@@ -27,5 +25,25 @@ function restoreOptions() {
     .then(value => setCurrentChoice(value.blacklist, "#blacklist"), onError);
 }
 
-document.addEventListener("DOMContentLoaded", restoreOptions);
-document.querySelector("form").addEventListener("submit", saveOptions);
+function explanationSubmit(e) {
+  e.preventDefault();
+  document.body.innerHTML = `
+    <form id="saveOptions">
+      <label>Openrouter Key <input type="text" id="key" name="Key" /></label>
+
+      <p>Whitelist</p>
+      <textarea id="whitelist"></textarea>
+
+      <p>Blacklist</p>
+      <textarea id="blacklist"></textarea>
+
+      <button type="submit">Save</button>
+    </form>
+  `
+  restoreOptions();
+  document.querySelector("#saveOptions").addEventListener("submit", saveOptions);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector("#explanation").addEventListener("submit", explanationSubmit);
+})

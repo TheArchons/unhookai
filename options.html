@@ -8,22 +8,15 @@
         border-collapse: collapse;
       }
     </style>
-
+    <script src="options.js"></script>
   </head>
 
   <body>
-    <form>
-      <label>Openrouter Key <input type="text" id="key" name="Key" /></label>
+    <form id="explanation">
+      <label for="explanation">Explain what you need to change and what. Must be at least 100 characters</label>
+      <textarea id="whitelist" name="explanation" minlength="100"></textarea>
 
-      <p>Whitelist</p>
-      <textarea id="whitelist"></textarea>
-
-      <p>Blacklist</p>
-      <textarea id="blacklist"></textarea>
-
-      <button type="submit">Save</button>
+      <button type="submit">Submit</button>
     </form>
-
-    <script src="options.js"></script>
   </body>
 </html>
