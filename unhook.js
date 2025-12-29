@@ -14,6 +14,9 @@ async function ready() {
 
     content = document.body.innerText
     key = (await browser.storage.sync.get("key")).key;
+    model = (await browser.storage.sync.get("model")).model;
+    model = model === undefined ? "deepseek/deepseek-r1-0528:free" : model
+    // console.log(model);
     // console.log(key);
     //console.log(`innerText: ${content}`)
 
@@ -24,12 +27,12 @@ async function ready() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            model: 'openai/gpt-oss-20b:free',
+            model: model,
             temperature: 0,
             messages: [
             {
                 role: 'user',
-                content: `You are an AI that automatically determines if the site the user is on is one that is productive or they are procrastinating. If the user is on the main page of sites that can either be productive or not, err on the safe side. For example, the youtube subscriptions page should be allowed. Return only the word "TRUE" if the user is on procrastinating content, and "FALSE" otherwise. ONLY return TRUE/FALSE, do not say anything else.\n${content}`,
+                content: `You are an AI that automatically determines if the page the user is seeing is one that is productive or they are procrastinating. If the user is on the main page of sites that can either be productive or not, err on the safe side. For example, the youtube subscriptions page should be allowed. Return only the word "TRUE" if the user is on procrastinating content, and "FALSE" otherwise. ONLY return TRUE/FALSE, do not say anything else.\n${content}`,
             },
             ],
         }),
