@@ -1,6 +1,7 @@
 const delayTime = 5000
 const bypassTime = 600000
 const recheckTime = 60000
+const blacklistRecheckTime = 5000
 
 async function ready() {
     //console.log(document.cookie)
@@ -91,6 +92,16 @@ function inList(listText, match) {
     return listText && list.some(item => match.match(item))
 }
 
+function checkBlacklist(blacklistText) {
+    console.log('Checking blacklist', blacklistText)
+    if (inList(blacklistText, window.location.href)) {
+        block("Blacklisted Website")
+        return true;
+    }
+    setTimeout(() => checkBlacklist(blacklistText), blacklistRecheckTime)
+    return false;
+}
+
 async function main() {
     let {whitelist: whiteListText, blacklist: blacklistText} = await browser.storage.sync.get(['whitelist', 'blacklist']);
     // console.log("whitelist")
@@ -101,10 +112,7 @@ async function main() {
         return;
     }
 
-    if (inList(blacklistText, window.location.href)) {
-        block("Blacklisted Website")
-        return;
-    }
+    checkBlacklist(blacklistText);
     
     if (document.cookie.includes('BypassUnhook=True;')) {
         document.cookie = 'BypassUnhook=False';
