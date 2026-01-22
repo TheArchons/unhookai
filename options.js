@@ -1,5 +1,6 @@
 function saveOptions(e) {
   browser.storage.sync.set({
+    providerUrl: document.querySelector("#providerUrl").value,
     key: document.querySelector("#key").value,
     model: document.querySelector("#model").value,
     whitelist: document.querySelector("#whitelist").value,
@@ -15,6 +16,9 @@ function restoreOptions() {
   function onError(error) {
     console.log(`Error: ${error}`);
   }
+
+  browser.storage.sync.get("providerUrl")
+    .then(value => setCurrentChoice(value.providerUrl === undefined ? "https://openrouter.ai/api/v1/chat/completions" : value.providerUrl, "#providerUrl"), onError);
 
   browser.storage.sync.get("key")
     .then(value => setCurrentChoice(value.key, "#key"), onError);
@@ -33,7 +37,9 @@ function explanationSubmit(e) {
   e.preventDefault();
   document.body.innerHTML = `
     <form id="saveOptions">
-      <label>Openrouter Key <input type="text" id="key" name="Key" /></label>
+      <label>Provider URL <input type="text" id="providerUrl" name="providerUrl" placeholder="https://openrouter.ai/api/v1/chat/completions" /></label>
+      <br>
+      <label>API Key <input type="text" id="key" name="Key" /></label>
       <br>
       <label for="model">Model</label>
       <input type="text" id="model" name="model" /></input>

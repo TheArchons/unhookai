@@ -17,11 +17,13 @@ async function ready() {
     key = (await browser.storage.sync.get("key")).key;
     model = (await browser.storage.sync.get("model")).model;
     model = model === undefined ? "deepseek/deepseek-r1-0528:free" : model
+    providerUrl = (await browser.storage.sync.get("providerUrl")).providerUrl;
+    providerUrl = providerUrl === undefined ? "https://openrouter.ai/api/v1/chat/completions" : providerUrl
     // console.log(model);
     // console.log(key);
     //console.log(`innerText: ${content}`)
 
-    let response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    let response = await fetch(providerUrl, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${key}`,
@@ -46,6 +48,16 @@ async function ready() {
     response = await response.json()
 
     console.log(response)
+
+    if (response?.choices?.[0]?.message?.content) {
+        // get the <reasoning></reasoning> if it exists
+        const content = response.choices[0].message.content;
+        const reasoningMatch = content.match(/<reasoning>(.*?)<\/reasoning>/s);
+        if (reasoningMatch) {
+            response.choices[0].message.reasoning = reasoningMatch[1].trim();
+            response.choices[0].message.content = content.replace(/<reasoning>.*?<\/reasoning>/s, '').trim();
+        }
+    }
 
     if (response?.choices?.[0]?.message?.content !== "TRUE") {
         console.log(`rechecking in ${recheckTime}`)
@@ -103,6 +115,11 @@ function checkBlacklist(blacklistText) {
 }
 
 async function main() {
+    if (document.cookie.includes('BypassUnhook=True;')) {
+        document.cookie = 'BypassUnhook=False';
+        setTimeout(ready, bypassTime)
+        return;
+    }
     let {whitelist: whiteListText, blacklist: blacklistText} = await browser.storage.sync.get(['whitelist', 'blacklist']);
     // console.log("whitelist")
     // console.log(whiteListText, blacklistText)
@@ -113,12 +130,6 @@ async function main() {
     }
 
     checkBlacklist(blacklistText);
-    
-    if (document.cookie.includes('BypassUnhook=True;')) {
-        document.cookie = 'BypassUnhook=False';
-        setTimeout(ready, bypassTime)
-        return;
-    }
 
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", () => setTimeout(ready, delayTime));
