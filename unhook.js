@@ -36,7 +36,7 @@ async function ready() {
             messages: [
             {
                 role: 'user',
-                content: `You are an AI that automatically determines if the page the user is seeing is one that is productive or they are procrastinating. If you have no evidence that the site is not productive (including if it links to an unproductive site but the current site itself is not unproductive), respond "FALSE". Return only the word "TRUE" if the user is on procrastinating content, and "FALSE" otherwise. ONLY return TRUE/FALSE, do not say anything else.\n${content}`,
+                content: `You are an AI that automatically determines if the page the user is seeing is one that is productive or they are procrastinating. If you have no (or little) evidence that the site is not productive (including if it links to an unproductive site but the current site itself is not unproductive), respond "FALSE". Return only the word "TRUE" if you are sure the user is on procrastinating content, and "FALSE" otherwise. Allow captcha pages and check the title of videos before deciding whether or not to block them. ONLY return TRUE/FALSE, do not say anything else.\n${content}`,
             },
             ],
         }),
