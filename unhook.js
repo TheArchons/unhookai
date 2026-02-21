@@ -1,5 +1,5 @@
 const delayTime = 5000
-const bypassTime = 600000
+const bypassTime = 60000
 const recheckTime = 60000
 const blacklistRecheckTime = 5000
 
@@ -141,7 +141,7 @@ function block(reasoning, pageContent) {
 function bypass(e) {
     //console.log(`form`);
     //console.log(e);
-    document.cookie = 'BypassUnhook=True'
+    document.cookie = `BypassUnhook=${Date.now() + bypassTime}`;
     window.location.reload();
 }
 
@@ -163,10 +163,17 @@ function checkBlacklist(blacklistText) {
     return false;
 }
 
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
 async function main() {
-    if (document.cookie.includes('BypassUnhook=True;')) {
-        document.cookie = 'BypassUnhook=False';
-        setTimeout(ready, bypassTime)
+    const bypass = getCookie('BypassUnhook');
+    if (bypass && bypass > Date.now()) {
+        setTimeout(ready, bypass - Date.now());
         return;
     }
     let {whitelist: whiteListText, blacklist: blacklistText} = await browser.storage.sync.get(['whitelist', 'blacklist']);
